@@ -18,10 +18,6 @@ export class ConfigService {
     return this.env.MONGODB_URI;
   }
 
-  public get elasticSearchAPM(): string | undefined {
-    return this.env.ES_APM;
-  }
-
   public get tokenSecret(): Buffer {
     if (!this.env.JWT_SECRET) {
       this.env.JWT_SECRET = randomBytes(64).toString();

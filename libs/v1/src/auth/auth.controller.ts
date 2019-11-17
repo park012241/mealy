@@ -1,5 +1,5 @@
 import {Body, Controller, Post, ValidationPipe} from '@nestjs/common';
-import {ApiUseTags} from '@nestjs/swagger';
+import {ApiOperation, ApiUseTags} from '@nestjs/swagger';
 import {AuthService} from './auth.service';
 import {AuthDto} from './dto/auth.dto';
 import {RefreshDto} from './dto/refresh.dto';
@@ -14,11 +14,17 @@ export class AuthController {
   }
 
   @Post()
+  @ApiOperation({
+    title: 'Get Token',
+  })
   public auth(@Body(new ValidationPipe()) authData: AuthDto): Promise<TokenInterface> {
     return this.authService.auth(authData);
   }
 
   @Post('refresh')
+  @ApiOperation({
+    title: 'Get Token By Refresh Token',
+  })
   public refresh(@Body(new ValidationPipe()) {refreshToken}: RefreshDto) {
     return this.authService.refresh(refreshToken);
   }

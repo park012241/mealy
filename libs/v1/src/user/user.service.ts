@@ -22,10 +22,6 @@ export class UserService {
     }).then();
   }
 
-  public greet() {
-    return 'Hello!';
-  }
-
   public async newUser(user: UserDto): Promise<void> {
     if (await this.passCodes.find({
       passCode: {

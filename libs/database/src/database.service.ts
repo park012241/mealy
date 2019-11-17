@@ -3,7 +3,7 @@ import {Collection, DbCollectionOptions, GridFSBucket, MongoClient} from 'mongod
 
 @Injectable()
 export class DatabaseService extends MongoClient {
-  private collections: Record<string, Collection>;
+  private collections: Record<string, Collection> = {};
 
   constructor(connectionURI: string) {
     super(connectionURI, {

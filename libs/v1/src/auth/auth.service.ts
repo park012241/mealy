@@ -51,4 +51,23 @@ export class AuthService {
       }),
     };
   }
+
+  public async refresh(refreshToken: string): Promise<TokenInterface> {
+    const data = this.jwt.verify(refreshToken);
+    if (data.kind !== TokenKind.refresh) {
+      throw new Error('This is not refresh token');
+    }
+
+    const query = this.users.find({
+      username: {
+        $eq: data.id,
+      },
+    });
+
+    if (!await query.hasNext()) {
+      throw new Error('There isn\'t user');
+    }
+
+    return this.signToken(await query.next());
+  }
 }

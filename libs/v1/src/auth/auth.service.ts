@@ -44,9 +44,9 @@ export class AuthService {
       });
     } catch (e) {
       if (e instanceof JsonWebTokenError) {
-        throw new ForbiddenException(`Token Error: ${e.message.toString()}`);
+        throw new ForbiddenException(e.message.toString());
       } else {
-        throw new InternalServerErrorException(e.message);
+        throw new InternalServerErrorException(e.message.toString());
       }
     }
 

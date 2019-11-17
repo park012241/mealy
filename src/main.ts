@@ -1,12 +1,18 @@
 import {NestFactory} from '@nestjs/core';
 import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
-import {start} from 'elastic-apm-node';
+import {config} from 'dotenv';
+import {flush, start} from 'elastic-apm-node';
 import {AppModule} from './app.module';
 
+config();
 if (process.env.ES_APM) {
   start({
     serverUrl: process.env.ES_APM,
+    serviceName: 'Mealy',
   });
+  setInterval(() => {
+    flush();
+  }, 1000);
 }
 
 const bootstrap = async () => {

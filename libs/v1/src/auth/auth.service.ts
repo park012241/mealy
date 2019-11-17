@@ -1,10 +1,11 @@
 import {DatabaseService} from '@app/database';
-import {Inject, Injectable} from '@nestjs/common';
+import {ForbiddenException, Inject, Injectable, InternalServerErrorException} from '@nestjs/common';
+import {JsonWebTokenError} from 'jsonwebtoken';
 import {Collection} from 'mongodb';
 import {Constants} from '../constants';
 import {User} from '../types';
 import {AuthDto} from './dto/auth.dto';
-import {TokenKind} from './interfaces/token-payload.interface';
+import {TokenKind, TokenPayload} from './interfaces/token-payload.interface';
 import {TokenInterface} from './interfaces/token.interface';
 import {JsonWebToken} from './json-web-token';
 
@@ -35,27 +36,18 @@ export class AuthService {
     return this.signToken(await query.next());
   }
 
-  private signToken(user: User): TokenInterface {
-    return {
-      access: this.jwt.sign({
-        id: user.username,
-        kind: TokenKind.access,
-      }, {
-        expiresIn: '1d',
-      }),
-      refresh: this.jwt.sign({
-        id: user.username,
-        kind: TokenKind.refresh,
-      }, {
-        expiresIn: '7d',
-      }),
-    };
-  }
-
   public async refresh(refreshToken: string): Promise<TokenInterface> {
-    const data = this.jwt.verify(refreshToken);
-    if (data.kind !== TokenKind.refresh) {
-      throw new Error('This is not refresh token');
+    let data: TokenPayload;
+    try {
+      data = this.jwt.verify(refreshToken, {
+        subject: TokenKind.refresh,
+      });
+    } catch (e) {
+      if (e instanceof JsonWebTokenError) {
+        throw new ForbiddenException(`Token Error: ${e.message.toString()}`);
+      } else {
+        throw new InternalServerErrorException(e.message);
+      }
     }
 
     const query = this.users.find({
@@ -69,5 +61,22 @@ export class AuthService {
     }
 
     return this.signToken(await query.next());
+  }
+
+  private signToken(user: User): TokenInterface {
+    return {
+      access: this.jwt.sign({
+        id: user.username,
+      }, {
+        expiresIn: '1d',
+        subject: TokenKind.access,
+      }),
+      refresh: this.jwt.sign({
+        id: user.username,
+      }, {
+        expiresIn: '7d',
+        subject: TokenKind.refresh,
+      }),
+    };
   }
 }

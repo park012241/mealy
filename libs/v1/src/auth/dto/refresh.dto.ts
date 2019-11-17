@@ -9,9 +9,10 @@ export class RefreshDto {
     description: 'User\'s Refresh Token',
     example: sign({
       id: 'park012241',
-      kind: TokenKind.refresh,
     }, Buffer.from('SLoWMoTIoN'), {
       expiresIn: '7d',
+      issuer: 'mealy',
+      subject: TokenKind.refresh,
     }),
   })
   public refreshToken: string;

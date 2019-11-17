@@ -5,5 +5,4 @@ export enum TokenKind {
 
 export interface TokenPayload {
   id: string;
-  kind: TokenKind;
 }

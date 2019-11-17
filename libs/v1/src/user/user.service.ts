@@ -1,7 +1,8 @@
 import {DatabaseService} from '@app/database';
 import {Injectable} from '@nestjs/common';
 import {Collection, GridFSBucket} from 'mongodb';
-import {User} from '../types/user';
+import {Constants} from '../constants';
+import {User} from '../types';
 import {UserDto} from './dto/user.dto';
 import {PassCodeInterface} from './interfaces/pass-code.interface';
 
@@ -11,10 +12,10 @@ export class UserService {
   private readonly users: Collection<User>;
   private readonly userProfileImages: GridFSBucket;
 
-  constructor(database: DatabaseService) {
-    this.passCodes = database.collection('pass-codes');
-    this.users = database.collection('users');
-    this.userProfileImages = database.gridFS('user-profiles');
+  constructor(database: DatabaseService, constants: Constants) {
+    this.passCodes = database.collection(constants.collectionName.passCode);
+    this.users = database.collection(constants.collectionName.users);
+    this.userProfileImages = database.gridFS(constants.collectionName.userProfileImages);
 
     this.users.createIndex('username' as keyof PassCodeInterface, {
       unique: true,

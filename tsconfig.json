@@ -14,20 +14,11 @@
       "@app/v1": [
         "libs/v1/src"
       ],
-      "@app/v1/*": [
-        "libs/v1/src/*"
-      ],
       "@app/config": [
         "libs/config/src"
       ],
-      "@app/config/*": [
-        "libs/config/src/*"
-      ],
       "@app/database": [
         "libs/database/src"
-      ],
-      "@app/database/*": [
-        "libs/database/src/*"
       ]
     }
   },

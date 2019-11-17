@@ -1,5 +1,5 @@
 import {Injectable} from '@nestjs/common';
-import {Collection, DbCollectionOptions, MongoClient} from 'mongodb';
+import {Collection, DbCollectionOptions, GridFSBucket, MongoClient} from 'mongodb';
 
 @Injectable()
 export class DatabaseService extends MongoClient {
@@ -23,5 +23,12 @@ export class DatabaseService extends MongoClient {
     }
 
     return this.collections[name] as Collection<T>;
+  }
+
+  public gridFS(name: string): GridFSBucket {
+    return new GridFSBucket(this.db(), {
+      bucketName: name,
+      chunkSizeBytes: 4096,
+    });
   }
 }

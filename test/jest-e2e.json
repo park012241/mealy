@@ -12,6 +12,10 @@
   },
   "moduleNameMapper": {
     "@app/v1": "<rootDir>/../libs/v1/src",
-    "@app/v1/(.*)": "<rootDir>/../libs/v1/src/$1"
+    "@app/v1/(.*)": "<rootDir>/../libs/v1/src/$1",
+    "@app/config": "<rootDir>/../libs/config/src",
+    "@app/config/(.*)": "<rootDir>/../libs/config/src/$1",
+    "@app/database": "<rootDir>/../libs/database/src",
+    "@app/database/(.*)": "<rootDir>/../libs/database/src/$1"
   }
 }

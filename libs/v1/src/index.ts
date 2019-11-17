@@ -1,1 +1,1 @@
-export * from './types';
+export * from './v1.module';

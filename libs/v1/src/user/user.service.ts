@@ -1,7 +1,7 @@
-import {User} from '@app/v1';
+import {DatabaseService} from '@app/database';
 import {Injectable} from '@nestjs/common';
 import {Collection, GridFSBucket} from 'mongodb';
-import {DatabaseService} from '../../database/database.service';
+import {User} from '../types/user';
 import {UserDto} from './dto/user.dto';
 import {PassCodeInterface} from './interfaces/pass-code.interface';
 

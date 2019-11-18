@@ -26,6 +26,9 @@ export class UserService {
     this.users.createIndex('username' as keyof PassCodeInterface, {
       unique: true,
     }).then();
+    this.passCodes.createIndex('passCode' as keyof PassCodeInterface, {
+      unique: true,
+    }).then();
   }
 
   public async newUser(user: UserDto): Promise<void> {
@@ -47,7 +50,11 @@ export class UserService {
       password: Buffer.from(user.password),
     }, await pc.next()));
 
-    await pc.destroy();
+    await this.passCodes.deleteOne({
+      passCode: {
+        $eq: user.passCode,
+      },
+    });
   }
 
   public async changePassword({password, token}: ChangePasswordDto): Promise<void> {
@@ -79,5 +86,15 @@ export class UserService {
         password: Buffer.from(password),
       },
     });
+  }
+
+  public getUser(user: string): Promise<User> {
+    return this.users.find({
+      username: {
+        $eq: /.+\..+\..+/.test(user) ? this.jwt.verify(user, {
+          subject: TokenKind.access,
+        }).id : user,
+      },
+    }).next();
   }
 }

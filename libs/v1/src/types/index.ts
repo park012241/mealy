@@ -1,1 +1,2 @@
-export * from './user';
+export * from './user.class';
+export * from './meal.class';
